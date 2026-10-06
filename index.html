@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -142,186 +142,16 @@ footer {
 .fr { font-size:.58rem; color:var(--dim); opacity:.4; }
 .intro { opacity:0; animation:rise .5s ease forwards .05s; }
 
-/* shared keyframes */
-@keyframes barshine {
-  0%   { background-position: 0%   0%; }
-  100% { background-position: 300% 0%; }
-}
-@keyframes ldot {
-  0%,100%{opacity:1;box-shadow:0 0 5px var(--gold)}
-  50%    {opacity:.2;box-shadow:none}
-}
-@keyframes ringpulse {
-  0%,100%{transform:scale(1);opacity:.6}
-  50%    {transform:scale(1.2);opacity:0}
-}
-
 /* ═══════════════════════════════════
-   IFRAME VIEWER
+   TELEGRAM POPUP
 ═══════════════════════════════════ */
-#viewer {
+
+#tg-overlay {
   position: fixed; inset: 0;
-  z-index: 9998;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-}
-#viewer.show { opacity: 1; pointer-events: all; }
-
-.viewer-bar {
-  height: 48px;
-  background: #0c0c0e;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 12px;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 2;
-}
-#viewer-back {
-  width: 32px; height: 32px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--gold);
-  font-size: 1rem;
-  font-family: 'Space Mono', monospace;
-  cursor: none;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .2s, border-color .2s;
-}
-#viewer-back:hover { background: rgba(245,200,66,.12); border-color: var(--gold); }
-#viewer-url {
-  flex: 1;
-  font-size: .65rem;
-  color: var(--muted);
-  letter-spacing: .04em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#viewer-close {
-  width: 32px; height: 32px;
-  background: rgba(255,255,255,.04);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--dim);
-  font-size: .72rem;
-  font-family: 'Space Mono', monospace;
-  cursor: none;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .2s, border-color .2s, color .2s;
-}
-#viewer-close:hover { background: rgba(255,255,255,.1); border-color: var(--muted); color: var(--white); }
-#viewer-frame {
-  flex: 1;
-  width: 100%;
-  border: none;
-  background: #fff;
-}
-
-/* ═══════════════════════════════════
-   TOP-RIGHT THREE-DOT MENU
-═══════════════════════════════════ */
-
-#menu-wrap {
-  position: fixed;
-  top: 16px; right: 16px;
-  z-index: 10000;
-}
-
-#menu-btn {
-  width: 42px; height: 42px;
-  display: flex; align-items: center; justify-content: center; gap: 4px;
-  background: rgba(17,17,21,.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  cursor: none;
-  transition: border-color .2s, background .2s, box-shadow .2s;
-}
-#menu-btn span {
-  width: 4px; height: 4px; border-radius: 50%;
-  background: var(--muted);
-  transition: background .2s, transform .2s;
-}
-#menu-btn:hover {
-  border-color: rgba(245,200,66,.35);
-  background: rgba(245,200,66,.06);
-  box-shadow: 0 0 22px rgba(245,200,66,.12);
-}
-#menu-btn:hover span { background: var(--gold); }
-#menu-btn.open { border-color: rgba(245,200,66,.4); background: rgba(245,200,66,.08); }
-#menu-btn.open span { background: var(--gold); }
-#menu-btn.open span:nth-child(2) { transform: scale(1.5); }
-
-#menu-drop {
-  position: absolute;
-  top: 50px; right: 0;
-  width: 194px;
-  background: #0f0f14;
-  border: 1px solid rgba(245,200,66,.18);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow:
-    0 0 0 1px rgba(245,200,66,.04),
-    0 20px 55px rgba(0,0,0,.75),
-    0 0 40px rgba(245,200,66,.05);
-  opacity: 0;
-  transform: translateY(-8px) scale(.96);
-  transform-origin: top right;
-  pointer-events: none;
-  transition: opacity .22s ease, transform .22s cubic-bezier(.34,1.56,.64,1);
-}
-#menu-drop.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
-#menu-drop::before {
-  content:'';
-  display: block; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold2), var(--gold), #ffe88a, var(--gold2), transparent);
-  background-size: 300% 100%;
-  animation: barshine 2.5s linear infinite;
-}
-
-.menu-item {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%;
-  padding: 13px 15px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  color: var(--text);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .7rem;
-  letter-spacing: .02em;
-  text-align: left;
-  text-decoration: none;
-  cursor: none;
-  transition: background .18s, color .18s, padding-left .18s;
-}
-.menu-item:last-child { border-bottom: none; }
-.menu-item:hover {
-  background: rgba(245,200,66,.06);
-  color: var(--white);
-  padding-left: 20px;
-}
-.menu-item svg { width: 13px; height: 13px; fill: var(--gold); flex-shrink: 0; opacity: .85; }
-
-/* ═══════════════════════════════════
-   HELP CENTER MODAL
-═══════════════════════════════════ */
-
-#help-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.78);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 9995;
+  background: rgba(0,0,0,.75);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  z-index: 9990;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -330,42 +160,49 @@ footer {
   pointer-events: none;
   transition: opacity .3s ease;
 }
-#help-overlay.show { opacity: 1; pointer-events: all; }
+#tg-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
 
-#help-modal {
+#tg-modal {
   position: relative;
   width: 100%;
   max-width: 430px;
   background: #13131a;
-  border: 1px solid rgba(245,200,66,.25);
+  border: 1px solid rgba(42,171,238,.28);
   border-radius: 8px;
   overflow: hidden;
   transform: translateY(28px) scale(.96);
   transition: transform .4s cubic-bezier(.34,1.56,.64,1);
   box-shadow:
-    0 0 0 1px rgba(245,200,66,.06),
-    0 28px 80px rgba(0,0,0,.8),
-    0 0 60px rgba(245,200,66,.07);
-  max-height: 92vh;
-  overflow-y: auto;
+    0 0 0 1px rgba(42,171,238,.06),
+    0 28px 80px rgba(0,0,0,.75),
+    0 0 60px rgba(42,171,238,.07);
 }
-#help-overlay.show #help-modal { transform: translateY(0) scale(1); }
+#tg-overlay.show #tg-modal {
+  transform: translateY(0) scale(1);
+}
 
-#help-modal::after {
+#tg-modal::after {
   content:'';
   position:absolute; inset:0;
   background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px);
   pointer-events:none; border-radius:8px; z-index:0;
 }
 
-.help-bar {
+.tg-bar {
   height: 3px;
-  background: linear-gradient(90deg, var(--gold2), var(--gold), #ffe88a, var(--gold2));
+  background: linear-gradient(90deg, var(--tg2), var(--tg), #6ee4ff, var(--tg2));
   background-size: 300% 100%;
   animation: barshine 2.5s linear infinite;
 }
+@keyframes barshine {
+  0%   { background-position: 0%   0%; }
+  100% { background-position: 300% 0%; }
+}
 
-#help-close {
+#tg-close {
   position: absolute; top: 14px; right: 14px;
   width: 28px; height: 28px;
   background: rgba(255,255,255,.04);
@@ -377,124 +214,195 @@ footer {
   font-size: .72rem;
   font-family: 'Space Mono', monospace;
   transition: background .2s, border-color .2s, color .2s;
-  z-index: 3;
+  z-index: 2;
 }
-#help-close:hover {
-  background: rgba(245,200,66,.12);
-  border-color: var(--gold);
-  color: var(--gold);
+#tg-close:hover {
+  background: rgba(255,255,255,.1);
+  border-color: var(--muted);
+  color: var(--white);
 }
 
-.help-inner { padding: 28px 26px 24px; position: relative; z-index: 1; }
+.tg-inner {
+  padding: 28px 26px 24px;
+  position: relative; z-index: 1;
+}
 
-.hc-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.tg-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px;
+}
 
-.as-logo {
-  width: 58px; height: 58px;
+.tg-icon {
+  width: 50px; height: 50px;
+  background: linear-gradient(135deg, var(--tg), var(--tg2));
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: -.02em;
-  color: #0c0c0e;
-  background: linear-gradient(135deg, var(--gold), var(--gold2));
   flex-shrink: 0;
-  box-shadow: 0 0 30px rgba(245,200,66,.32);
+  box-shadow: 0 0 28px rgba(42,171,238,.32);
+  animation: iconpop .5s cubic-bezier(.34,1.56,.64,1) .4s both;
   position: relative;
-  animation: logoIn .5s cubic-bezier(.34,1.56,.64,1) .25s both;
 }
-.as-logo::before {
+.tg-icon::before {
   content:'';
   position: absolute; inset: -6px;
   border-radius: 50%;
-  border: 1px solid rgba(245,200,66,.25);
-  animation: ringpulse 2.4s ease-in-out infinite;
+  border: 1px solid rgba(42,171,238,.25);
+  animation: ringpulse 2s ease-in-out infinite;
 }
-@keyframes logoIn { from{transform:scale(0) rotate(-15deg)} to{transform:scale(1) rotate(0)} }
+@keyframes iconpop { from{transform:scale(0) rotate(-15deg)} to{transform:scale(1) rotate(0)} }
+@keyframes ringpulse {
+  0%,100%{transform:scale(1);opacity:.6}
+  50%    {transform:scale(1.2);opacity:0}
+}
+.tg-icon svg { width: 22px; height: 22px; fill: #fff; }
 
-.hc-eyebrow {
-  font-size: .55rem; color: var(--gold);
+.tg-title-block {}
+.tg-eyebrow {
+  font-size: .55rem; color: var(--tg);
   letter-spacing: .1em; text-transform: uppercase;
   margin-bottom: 5px;
   display: flex; align-items: center; gap: 5px;
 }
-.hc-dot {
-  width: 5px; height: 5px; background: var(--gold);
-  border-radius: 50%;
+.live-dot {
+  width: 5px; height: 5px;
+  background: var(--tg); border-radius: 50%;
   animation: ldot 1.4s ease-in-out infinite;
 }
-.hc-title {
+@keyframes ldot {
+  0%,100%{opacity:1;box-shadow:0 0 5px var(--tg)}
+  50%    {opacity:.2;box-shadow:none}
+}
+.tg-title {
   font-family: 'Space Mono', monospace;
-  font-size: 1rem; font-weight: 700;
+  font-size: 1.05rem; font-weight: 700;
   color: var(--white); letter-spacing: -.02em;
 }
 
-.hc-desc {
-  font-size: .68rem; color: var(--muted);
-  line-height: 1.9; margin-bottom: 18px;
-  border-left: 2px solid rgba(245,200,66,.2);
+.tg-desc {
+  font-size: .69rem; color: var(--muted);
+  line-height: 1.9; margin-bottom: 20px;
+  border-left: 2px solid rgba(42,171,238,.2);
   padding-left: 12px;
 }
 
-.hc-list { display: flex; flex-direction: column; gap: 9px; }
+.tg-prog-wrap { margin-bottom: 20px; }
+.tg-prog-row {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 7px;
+}
+.tg-prog-lbl { font-size: .56rem; color: var(--dim); letter-spacing: .04em; }
+#tg-cd { font-size: .56rem; color: var(--tg); font-weight: 700; }
+.tg-prog-track {
+  height: 2px; background: rgba(255,255,255,.06);
+  border-radius: 999px; overflow: hidden;
+}
+#tg-fill {
+  height: 100%; width: 100%;
+  background: linear-gradient(90deg, var(--tg2), var(--tg));
+  border-radius: 999px;
+  transform-origin: left;
+  animation: shrink var(--d, 8s) linear forwards;
+}
+@keyframes shrink { from{transform:scaleX(1)} to{transform:scaleX(0)} }
 
-.hc-row {
-  display: flex; align-items: center; gap: 13px;
-  padding: 13px 14px;
-  background: rgba(255,255,255,.015);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+.tg-actions {
+  display: flex; gap: 10px; margin-bottom: 16px;
+}
+
+.btn-join {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, var(--tg), var(--tg2));
+  border: none; border-radius: 5px;
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+  font-size: .74rem; font-weight: 700; letter-spacing: .02em;
   text-decoration: none;
-  color: inherit;
   cursor: none;
+  box-shadow: 0 4px 22px rgba(42,171,238,.32);
+  transition: opacity .2s, transform .15s, box-shadow .2s;
+}
+.btn-join:hover {
+  opacity: .88;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 30px rgba(42,171,238,.48);
+}
+.btn-join svg { width: 13px; height: 13px; fill: #fff; flex-shrink: 0; }
+
+.btn-insta {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #4f5bd5, var(--ig3), var(--ig), var(--ig2));
+  border: none; border-radius: 5px;
+  color: #fff;
+  font-family: 'Space Mono', monospace;
+  font-size: .74rem; font-weight: 700; letter-spacing: .02em;
+  text-decoration: none;
+  cursor: none;
+  box-shadow: 0 4px 22px rgba(225,48,108,.32);
+  transition: opacity .2s, transform .15s, box-shadow .2s;
+}
+.btn-insta:hover {
+  opacity: .88;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 30px rgba(225,48,108,.48);
+}
+.btn-insta svg { width: 13px; height: 13px; fill: #fff; flex-shrink: 0; }
+
+.btn-later {
+  padding: 12px 14px;
+  background: transparent;
+  border: 1px solid var(--border); border-radius: 5px;
+  color: var(--dim);
+  font-family: 'Space Mono', monospace; font-size: .68rem;
+  cursor: none;
+  white-space: nowrap;
+  transition: border-color .2s, color .2s, background .2s;
+}
+.btn-later:hover {
+  border-color: var(--muted);
+  color: var(--white);
+  background: rgba(255,255,255,.03);
+}
+
+.tg-dont {
+  display: flex; align-items: center; gap: 9px;
+  cursor: none; user-select: none;
+}
+.tg-dont input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border: 1px solid var(--border); border-radius: 3px;
+  background: transparent; cursor: none; flex-shrink: 0;
   position: relative;
-  overflow: hidden;
-  transition: border-color .2s, background .2s, transform .15s;
+  transition: border-color .2s, background .2s;
 }
-.hc-row::before {
-  content:''; position:absolute; left:0; top:0; bottom:0;
-  width: 2px; background: var(--gold);
-  opacity: 0; transition: opacity .2s;
+.tg-dont input[type="checkbox"]:checked {
+  background: var(--tg); border-color: var(--tg);
 }
-.hc-row:hover {
-  border-color: rgba(245,200,66,.28);
-  background: rgba(245,200,66,.045);
-  transform: translateX(2px);
+.tg-dont input[type="checkbox"]:checked::after {
+  content:'';
+  position: absolute; left: 3px; top: 1px;
+  width: 5px; height: 8px;
+  border: 2px solid #fff;
+  border-top: none; border-left: none;
+  transform: rotate(40deg);
 }
-.hc-row:hover::before { opacity: 1; }
-
-.hc-ico {
-  width: 32px; height: 32px;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(245,200,66,.08);
-  border: 1px solid rgba(245,200,66,.16);
-  flex-shrink: 0;
+.tg-dont label {
+  font-size: .6rem; color: var(--dim); cursor: none;
+  transition: color .15s;
 }
-.hc-ico svg { width: 14px; height: 14px; fill: var(--gold); }
-
-.hc-ico.ig {
-  background: linear-gradient(135deg, rgba(247,119,55,.16), rgba(193,53,132,.16));
-  border-color: rgba(225,48,108,.28);
-}
-.hc-ico.ig svg { fill: var(--ig); }
-
-.hc-body { flex: 1; min-width: 0; }
-.hc-lbl { display:block; font-size: .52rem; color: var(--dim); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 3px; }
-.hc-val { display:block; font-size: .68rem; color: var(--white); letter-spacing: -.01em; word-break: break-all; }
-
-.hc-arrow { font-size: .6rem; color: var(--dim); opacity: 0; transition: opacity .2s, color .2s; }
-.hc-row:hover .hc-arrow { opacity: 1; color: var(--gold); }
+.tg-dont:hover label { color: var(--muted); }
 
 /* ─── responsive ─── */
 @media(max-width:480px){
   .curl, .cnum { display:none; }
   footer { flex-direction:column; gap:6px; align-items:flex-start; }
-  .help-inner { padding: 22px 18px 20px; }
-  .as-logo { width: 50px; height: 50px; font-size: 1rem; }
-  .hc-val { font-size: .64rem; }
-  #menu-wrap { top: 12px; right: 12px; }
+  .tg-inner { padding: 22px 18px 20px; }
+  .tg-actions { flex-direction: column; }
+  .btn-later { text-align: center; }
 }
 
 /* ═══════════════════════════════════
@@ -542,6 +450,7 @@ footer {
   animation: pwa-glow-pulse 3.5s ease-in-out infinite, pwa-float 5s ease-in-out infinite 1.2s;
 }
 
+/* gold top shimmer bar */
 #pwa-banner::before {
   content:'';
   display: block;
@@ -552,6 +461,7 @@ footer {
   border-radius: 18px 18px 0 0;
 }
 
+/* inner radial glow */
 #pwa-banner::after {
   content:'';
   position: absolute; inset: 0;
@@ -562,6 +472,7 @@ footer {
   pointer-events: none;
 }
 
+/* close button -- top right corner */
 #pwa-close-btn {
   position: absolute;
   top: -10px; right: -10px;
@@ -595,7 +506,11 @@ footer {
   position: relative; z-index: 1;
 }
 
-.pwa-icon-wrap { position: relative; flex-shrink: 0; }
+/* icon */
+.pwa-icon-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
 .pwa-icon {
   width: 52px; height: 52px;
   border-radius: 14px;
@@ -620,6 +535,7 @@ footer {
   animation: ringpulse 2.8s ease-in-out infinite;
 }
 
+/* text block */
 .pwa-text { flex: 1; min-width: 0; }
 .pwa-eyebrow {
   font-size: .5rem; color: var(--gold);
@@ -644,7 +560,10 @@ footer {
   font-size: .54rem; color: var(--dim); letter-spacing: .02em;
   line-height: 1.5;
 }
-.pwa-badges { display: flex; align-items: center; gap: 5px; margin-top: 7px; }
+.pwa-badges {
+  display: flex; align-items: center; gap: 5px;
+  margin-top: 7px;
+}
 .pwa-badge {
   font-size: .48rem; font-family: 'JetBrains Mono', monospace;
   letter-spacing: .05em; text-transform: uppercase;
@@ -656,6 +575,7 @@ footer {
   white-space: nowrap;
 }
 
+/* install button */
 .pwa-actions {
   display: flex; flex-direction: column;
   align-items: center; gap: 0;
@@ -693,7 +613,10 @@ footer {
 #pwa-install-btn svg { width: 13px; height: 13px; fill: #080808; flex-shrink: 0; position: relative; }
 #pwa-install-btn span { position: relative; }
 
-#pwa-dismiss-btn { display: none; }
+/* hidden dismiss (JS still references it) */
+#pwa-dismiss-btn {
+  display: none;
+}
 
 @media(max-width:400px){
   .pwa-inner { gap: 11px; padding: 16px 14px 15px; }
@@ -708,29 +631,21 @@ footer {
 
 <div id="cur"></div>
 
-<!-- ══ IFRAME VIEWER ══ -->
-<div id="viewer">
-  <div class="viewer-bar">
-    <button id="viewer-back" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Back">←</button>
-    <span id="viewer-url">AKASH SINGH RAJPUT</span>
-    <button id="viewer-close" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Close">✕</button>
-  </div>
-  <iframe id="viewer-frame" src="about:blank" allowfullscreen allow="fullscreen"></iframe>
-</div>
-<!-- ══════════════════════ -->
-
 <!-- ══ PWA INSTALL BANNER ══ -->
 <div id="pwa-banner">
+  <!-- close X button -->
   <button id="pwa-close-btn" onmouseenter="bc()" onmouseleave="sc()" onclick="document.getElementById('pwa-banner').classList.remove('show'); deferredPrompt = null;" aria-label="Close">✕</button>
 
   <div class="pwa-inner">
+    <!-- icon -->
     <div class="pwa-icon-wrap">
       <div class="pwa-icon">
-        <img src="https://i.postimg.cc/KzTy05Wm/IMG-20250301-092318-614.jpg" alt="AKASH">
+        <img src="https://i.postimg.cc/KzTy05Wm/IMG-20250301-092318-614.jpg" alt="RolexCoderZ">
       </div>
       <div class="pwa-icon-ring"></div>
     </div>
 
+    <!-- text -->
     <div class="pwa-text">
       <div class="pwa-eyebrow">
         <span class="pwa-eyebrow-dot"></span>
@@ -738,8 +653,10 @@ footer {
       </div>
       <div class="pwa-title">AKASH</div>
       <div class="pwa-sub">Fast · Education · Free</div>
+
     </div>
 
+    <!-- install btn -->
     <div class="pwa-actions">
       <button id="pwa-install-btn" onmouseenter="bc()" onmouseleave="sc()">
         <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
@@ -748,91 +665,78 @@ footer {
     </div>
   </div>
 
+  <!-- hidden btn kept for JS compatibility -->
   <button id="pwa-dismiss-btn" style="display:none"></button>
 </div>
 <!-- ════════════════════════ -->
 
-<!-- ══ TOP-RIGHT THREE-DOT MENU ══ -->
-<div id="menu-wrap">
-  <button id="menu-btn" onclick="toggleMenu(event)" onmouseenter="bc()" onmouseleave="sc()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+<!-- ══ TELEGRAM POPUP ══ -->
+<div id="tg-overlay">
+  <div id="tg-modal">
+    <div class="tg-bar"></div>
+    <button id="tg-close" onmouseenter="bc()" onmouseleave="sc()" onclick="closePopup()">✕</button>
 
-  <div id="menu-drop">
-    <a href="#" class="menu-item" onclick="goHome(event)" onmouseenter="bc()" onmouseleave="sc()">
-      <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v10h-5v-6h-2v6H6V11H3l9-8z"/></svg>
-      Home
-    </a>
-    <button class="menu-item" onclick="openHelp(event)" onmouseenter="bc()" onmouseleave="sc()">
-      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 10.9 12 11.5 12 13h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26A2 2 0 1010 7h-2a4 4 0 114 4z"/></svg>
-      Help Center
-    </button>
-  </div>
-</div>
-<!-- ══════════════════════════════ -->
+    <div class="tg-inner">
 
-<!-- ══ HELP CENTER MODAL ══ -->
-<div id="help-overlay">
-  <div id="help-modal">
-    <div class="help-bar"></div>
-    <button id="help-close" onmouseenter="bc()" onmouseleave="sc()" onclick="closeHelp()" aria-label="Close">✕</button>
-
-    <div class="help-inner">
-
-      <div class="hc-head">
-        <div class="as-logo">AS</div>
-        <div>
-          <div class="hc-eyebrow"><span class="hc-dot"></span>help_center</div>
-          <div class="hc-title">AKASH SINGH RAJPUT</div>
+      <div class="tg-head">
+        <div class="tg-icon">
+          <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <div class="tg-title-block">
+          <div class="tg-eyebrow"><span class="live-dot"></span>website_updates</div>
+          <div class="tg-title">Telegram!</div>
         </div>
       </div>
 
-      <div class="hc-desc">
-        Koi bhi query, support ya issue ke liye neeche diye gaye details par click karke direct contact karein. 🚀
+      <div class="tg-desc">
+        Website updates, new platforms, announcements &amp; more -- sabse pehle Telegram pe milega.
+        <br><br>
+        Telegram channel ban ho gaya hai -- koi issue ho toh Instagram pe message karo. 🚀
       </div>
 
-      <div class="hc-list">
-
-        <!-- MOBILE -->
-        <a class="hc-row" data-x="udm;*80731YYYYY95" href="#"
-           onmouseenter="bc()" onmouseleave="sc()">
-          <span class="hc-ico">
-            <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-          </span>
-          <span class="hc-body">
-            <span class="hc-lbl">mobile</span>
-            <span class="hc-val">+91620XXXXX84</span>
-          </span>
-          <span class="hc-arrow">↗</span>
-        </a>
-
-        <!-- INSTAGRAM -->
-        <a class="hc-row" data-x="iuuqr;..vvv/horu`fs`l/bnl.cui^`j`ri^32" href="#"
-           onmouseenter="igbc()" onmouseleave="sc()">
-          <span class="hc-ico ig">
-            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </span>
-          <span class="hc-body">
-            <span class="hc-lbl">instagram</span>
-            <span class="hc-val">@bth_akash_23</span>
-          </span>
-          <span class="hc-arrow">↗</span>
-        </a>
-
-        <!-- EMAIL -->
-        <a class="hc-row" data-x="l`hmun;`j`rijtl`srhoficuiAfl`hm/bnl" href="#"
-           onmouseenter="bc()" onmouseleave="sc()">
-          <span class="hc-ico">
-            <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          </span>
-          <span class="hc-body">
-            <span class="hc-lbl">email</span>
-            <span class="hc-val">akashkumarsinghbth@gmail.com</span>
-          </span>
-          <span class="hc-arrow">↗</span>
-        </a>
-
+      <!-- countdown bar -->
+      <div class="tg-prog-wrap">
+        <div class="tg-prog-row">
+          <span class="tg-prog-lbl">auto_close_in</span>
+          <span id="tg-cd">8s</span>
+        </div>
+        <div class="tg-prog-track">
+          <div id="tg-fill" style="--d:8s"></div>
+        </div>
       </div>
+
+      <!-- buttons -->
+      <div class="tg-actions">
+        <a href="https://t.me/AKASHSINGH20"
+           class="btn-join"
+           target="_blank"
+           onmouseenter="tgbc()" onmouseleave="sc()"
+           onclick="onJoin()">
+          <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          Join Now ↗
+        </a>
+        <button class="btn-later"
+                onmouseenter="bc()" onmouseleave="sc()"
+                onclick="closePopup()">Maybe Later</button>
+      </div>
+
+      <!-- instagram alt contact -->
+      <a href="https://www.instagram.com/bth_akash_23?stkn=MWN5cnI0eGxpajl1aA=="
+         class="btn-insta"
+         target="_blank"
+         rel="noopener"
+         style="margin-bottom:16px;"
+         onmouseenter="igbc()" onmouseleave="sc()">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Message on Instagram ↗
+      </a>
+
+      <!-- don't show again -->
+      <div class="tg-dont" onmouseenter="bc()" onmouseleave="sc()">
+        <input type="checkbox" id="dontshow">
+        <label for="dontshow">Don't show me again today</label>
+      </div>
+
     </div>
   </div>
 </div>
@@ -859,7 +763,7 @@ footer {
 
   <div class="cards">
 
-    <a data-x="iuuqr;..snmdybneds{/bnl.SB.>c`ubiHe<784d53ee8345d2gd891bg01b" href="#" class="card"
+    <a href="https://rolexcoderz.com/RC/?batchId=695e42dd9254e3fe980cf10c" class="card" target="_blank"
        onmouseenter="bc()" onmouseleave="sc()">
       <span class="cnum">01</span>
       <img class="cimg"
@@ -869,7 +773,7 @@ footer {
         <h3>UDAAN BIHAR BOARD 2027</h3>
         <div class="meta">AKASH SINGH RAJPUT<span class="d">·</span>Education</div>
       </div>
-      <span class="curl">AKASH.com/RC ↗</span>
+      <span class="curl">https://rolexcoderz.com/RC/?batchId=695e42dd9254e3fe980cf10c ↗</span>
     </a>
 <!--
     <a href="https://bthamit.vercel·app" class="card" target="_blank"
@@ -882,10 +786,10 @@ footer {
         <h3>Vibrant Academy</h3>
         <div class="meta">JEE<span class="d">·</span>Education</div>
       </div>
-      <span class="curl">AKASH.com/VT ↗</span>
+      <span class="curl">rolexcoderz.com/VT ↗</span>
     </a>
 
-    <a href="https://AKASH.com/NT" class="card" target="_blank"
+    <a href="https://RolexCoderZ.com/NT" class="card" target="_blank"
        onmouseenter="bc()" onmouseleave="sc()">
       <span class="cnum">03</span>
       <img class="cimg"
@@ -895,10 +799,10 @@ footer {
         <h3>Next Toppers</h3>
         <div class="meta">Board Exams<span class="d">·</span>Education</div>
       </div>
-      <span class="curl">AKASH.com/NT ↗</span>
+      <span class="curl">rolexcoderz.com/NT ↗</span>
     </a>
 
-    <a href="https://AKASH.com/MissionJeet" class="card" target="_blank"
+    <a href="https://RolexCoderZ.com/MissionJeet" class="card" target="_blank"
        onmouseenter="bc()" onmouseleave="sc()">
       <span class="cnum">04</span>
       <img class="cimg"
@@ -908,10 +812,10 @@ footer {
         <h3>Mission Jeet</h3>
         <div class="meta">JEE / NEET<span class="d">·</span>Education</div>
       </div>
-      <span class="curl">AKASH.com/MissionJeet ↗</span>
+      <span class="curl">rolexcoderz.com/MissionJeet ↗</span>
     </a>
 
-    <a href="https://AKASH.com/AR/" class="card" target="_blank"
+    <a href="https://rolexcoderz.com/AR/" class="card" target="_blank"
        onmouseenter="bc()" onmouseleave="sc()">
       <span class="cnum">05</span>
       <img class="cimg"
@@ -921,7 +825,7 @@ footer {
         <h3>English Speaking Course by Aleena Rais</h3>
         <div class="meta">Grammar<span class="d">·</span>Education</div>
       </div>
-      <span class="curl">AKASH.com/AleenaRais ↗</span>
+      <span class="curl">rolexcoderz.com/AleenaRais ↗</span>
     </a>
     
     <a href="#" class="card" target="_blank"
@@ -934,10 +838,10 @@ footer {
         <h3>Unacademy</h3>
         <div class="meta">Neet/Jee<span class="d">·</span>Education</div>
       </div>
-      <span class="curl">AKASH.com/UC ↗</span>
+      <span class="curl">rolexcoderz.com/UC ↗</span>
     </a>
     
-    <a href="https://AKASH.com/Pi/" class="card" target="_blank"
+    <a href="https://rolexcoderz.com/Pi/" class="card" target="_blank"
        onmouseenter="bc()" onmouseleave="sc()">
       <span class="cnum">07</span>
       <img class="cimg"
@@ -947,7 +851,7 @@ footer {
         <h3>PW OTT - Pi</h3>
         <div class="meta">OTT<span class="d">·</span>Education</div>
       </div>
-      <span class="curl">AKASH.com/Pi ↗</span>
+      <span class="curl">rolexcoderz.com/Pi ↗</span>
     </a>
     
     <a href="#" class="card" target="_blank"
@@ -960,7 +864,7 @@ footer {
         <h3>THE SKILLED BRAINS</h3>
         <div class="meta">Skill<span class="d">·</span>Education</div>
       </div>
-      <span class="curl">AKASH.com/SB ↗</span>
+      <span class="curl">rolexcoderz.com/SB ↗</span>
     </a>
    
    -->
@@ -985,137 +889,69 @@ function tgbc() { cur.classList.remove('big','igbig');   cur.classList.add('tgbi
 function igbc() { cur.classList.remove('big','tgbig');   cur.classList.add('igbig'); }
 function sc()   { cur.classList.remove('big','tgbig','igbig'); }
 
-/* ═══════════════════════════════════
-   IFRAME VIEWER LOGIC
-═══════════════════════════════════ */
-const viewer        = document.getElementById('viewer');
-const viewerFrame   = document.getElementById('viewer-frame');
-const viewerUrlEl   = document.getElementById('viewer-url');
-let   viewerHistoryPushed = false;
+/* ── Popup logic ── */
+const STORAGE_KEY   = 'rcz_tg_hide_date';
+const AUTO_SEC      = 8;
 
-const VIEWER_TITLE = 'AKASH SINGH RAJPUT';
+const overlay  = document.getElementById('tg-overlay');
+const cdEl     = document.getElementById('tg-cd');
+const fillEl   = document.getElementById('tg-fill');
+const checkbox = document.getElementById('dontshow');
 
-function openViewer(url) {
-  if (!url || url === '#') return;
-  viewerFrame.src = url;
-  viewerUrlEl.textContent = VIEWER_TITLE;
-  viewer.classList.add('show');
-  document.body.style.overflow = 'hidden';
-  history.pushState({ viewer: url }, '', location.href);
-  viewerHistoryPushed = true;
+let autoTimer, cdInterval, timeLeft;
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
 }
 
-function hideViewer() {
-  viewer.classList.remove('show');
-  viewerFrame.src = 'about:blank';
-  document.body.style.overflow = '';
-  viewerHistoryPushed = false;
+function shouldShow() {
+  try { return localStorage.getItem(STORAGE_KEY) !== todayStr(); }
+  catch(e) { return true; }
 }
 
-function closeViewer() {
-  if (viewerHistoryPushed) {
-    history.back();
-  } else {
-    hideViewer();
-  }
+function saveHide() {
+  try { localStorage.setItem(STORAGE_KEY, todayStr()); } catch(e) {}
 }
 
-window.addEventListener('popstate', e => {
-  if (e.state && e.state.viewer) {
-    viewerFrame.src = e.state.viewer;
-    viewerUrlEl.textContent = VIEWER_TITLE;
-    viewer.classList.add('show');
-    document.body.style.overflow = 'hidden';
-    viewerHistoryPushed = true;
-  } else {
-    hideViewer();
-  }
+function openPopup() {
+  overlay.classList.add('show');
+  fillEl.style.animation = 'none';
+  void fillEl.offsetWidth;
+  fillEl.style.setProperty('--d', AUTO_SEC + 's');
+  fillEl.style.animation = '';
+
+  timeLeft = AUTO_SEC;
+  cdEl.textContent = timeLeft + 's';
+
+  cdInterval = setInterval(() => {
+    timeLeft--;
+    cdEl.textContent = timeLeft + 's';
+    if (timeLeft <= 0) clearInterval(cdInterval);
+  }, 1000);
+
+  autoTimer = setTimeout(closePopup, AUTO_SEC * 1000);
+}
+
+function closePopup() {
+  if (checkbox.checked) saveHide();
+  clearTimeout(autoTimer);
+  clearInterval(cdInterval);
+  overlay.classList.remove('show');
+}
+
+function onJoin() {
+  saveHide();
+  clearTimeout(autoTimer);
+  clearInterval(cdInterval);
+  setTimeout(closePopup, 400);
+}
+
+overlay.addEventListener('click', e => {
+  if (e.target === overlay) closePopup();
 });
 
-/* ═══════════════════════════════════
-   XOR LINK HYDRATION  (key = 1)
-═══════════════════════════════════ */
-const XOR_KEY = 1;
-function xorStr(s) {
-  let out = '';
-  for (let i = 0; i < s.length; i++) {
-    out += String.fromCharCode(s.charCodeAt(i) ^ XOR_KEY);
-  }
-  return out;
-}
-
-function initCards() {
-  document.querySelectorAll('.card').forEach(card => {
-    if (card.dataset.viewerBound) return;
-    card.dataset.viewerBound = '1';
-    card.addEventListener('click', e => {
-      const url = card.getAttribute('href');
-      if (url && url !== '#' && url !== '') {
-        e.preventDefault();
-        openViewer(url);
-      }
-    });
-  });
-}
-
-function hydrateLinks() {
-  document.querySelectorAll('[data-x]').forEach(el => {
-    const url = xorStr(el.getAttribute('data-x'));
-    el.setAttribute('href', url);
-    if (/^(tel|mailto):/i.test(url)) {
-      el.removeAttribute('target');
-    } else {
-      el.setAttribute('target', '_blank');
-      el.setAttribute('rel', 'noopener');
-    }
-  });
-  initCards();
-}
-document.addEventListener('DOMContentLoaded', hydrateLinks);
-window.addEventListener('load', hydrateLinks);
-
-/* ── Three-dot menu ── */
-const menuBtn  = document.getElementById('menu-btn');
-const menuDrop = document.getElementById('menu-drop');
-
-function toggleMenu(e) {
-  if (e) e.stopPropagation();
-  const open = menuDrop.classList.toggle('show');
-  menuBtn.classList.toggle('open', open);
-}
-function closeMenu() {
-  menuDrop.classList.remove('show');
-  menuBtn.classList.remove('open');
-}
-function goHome(e) {
-  if (e) e.preventDefault();
-  closeMenu();
-  if (viewer.classList.contains('show')) {
-    closeViewer();
-  } else {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-}
-document.addEventListener('click', e => {
-  if (!document.getElementById('menu-wrap').contains(e.target)) closeMenu();
-});
-
-/* ── Help Center modal ── */
-const helpOverlay = document.getElementById('help-overlay');
-
-function openHelp(e) {
-  if (e) { e.preventDefault(); e.stopPropagation(); }
-  closeMenu();
-  helpOverlay.classList.add('show');
-}
-function closeHelp() {
-  helpOverlay.classList.remove('show');
-}
-helpOverlay.addEventListener('click', e => {
-  if (e.target === helpOverlay) closeHelp();
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeHelp(); closeMenu(); }
+window.addEventListener('load', () => {
+  if (shouldShow()) setTimeout(openPopup, 1300);
 });
 
 /* ── PWA Install Banner ── */
@@ -1127,6 +963,7 @@ const pwaDismissBtn = document.getElementById('pwa-dismiss-btn');
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
+  // Show banner after 2.5s (after page settles)
   setTimeout(() => {
     pwaBanner.classList.add('show');
   }, 2500);
@@ -1152,8 +989,8 @@ window.addEventListener('appinstalled', () => {
 
 /* ── PWA Manifest (inline via blob) ── */
 const manifest = {
-  name: "AKASH",
-  short_name: "AKASH",
+  name: "RolexCoderZ",
+  short_name: "RolexCoderZ",
   description: "Direct access to all course platforms.",
   start_url: "/",
   display: "standalone",
