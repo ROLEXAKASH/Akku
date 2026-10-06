@@ -712,7 +712,7 @@ footer {
 <div id="viewer">
   <div class="viewer-bar">
     <button id="viewer-back" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Back">←</button>
-    <span id="viewer-url">about:blank</span>
+    <span id="viewer-url">AKASH SINGH RAJPUT</span>
     <button id="viewer-close" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Close">✕</button>
   </div>
   <iframe id="viewer-frame" src="about:blank" allowfullscreen allow="fullscreen"></iframe>
@@ -993,11 +993,12 @@ const viewerFrame   = document.getElementById('viewer-frame');
 const viewerUrlEl   = document.getElementById('viewer-url');
 let   viewerHistoryPushed = false;
 
+const VIEWER_TITLE = 'AKASH SINGH RAJPUT';
+
 function openViewer(url) {
   if (!url || url === '#') return;
   viewerFrame.src = url;
-  try { viewerUrlEl.textContent = new URL(url).hostname; }
-  catch(e) { viewerUrlEl.textContent = url; }
+  viewerUrlEl.textContent = VIEWER_TITLE;
   viewer.classList.add('show');
   document.body.style.overflow = 'hidden';
   history.pushState({ viewer: url }, '', location.href);
@@ -1022,8 +1023,7 @@ function closeViewer() {
 window.addEventListener('popstate', e => {
   if (e.state && e.state.viewer) {
     viewerFrame.src = e.state.viewer;
-    try { viewerUrlEl.textContent = new URL(e.state.viewer).hostname; }
-    catch(err) { viewerUrlEl.textContent = e.state.viewer; }
+    viewerUrlEl.textContent = VIEWER_TITLE;
     viewer.classList.add('show');
     document.body.style.overflow = 'hidden';
     viewerHistoryPushed = true;
