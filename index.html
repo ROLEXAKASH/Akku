@@ -221,122 +221,16 @@ footer {
 }
 .viewer-btn:hover { background: rgba(245,200,66,.12); border-color: var(--gold); }
 #viewer-reload:hover { transform: rotate(180deg); }
+#viewer-external { font-size: .85rem; }
+#viewer-external:hover { transform: translate(1px, -1px); }
 #viewer-close { color: var(--dim); }
 #viewer-close:hover { background: rgba(255,255,255,.1); border-color: var(--muted); color: var(--white); }
 
-/* ── frame wrapper with loader overlay ── */
-.frame-wrap {
-  position: relative;
+#viewer-frame {
   flex: 1;
   width: 100%;
-  background: #fff;
-  overflow: hidden;
-}
-#viewer-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
   border: none;
   background: #fff;
-  opacity: 0;
-  transition: opacity .35s ease;
-}
-#viewer-frame.ready { opacity: 1; }
-
-/* ── LOADER ── */
-#loader {
-  position: absolute;
-  inset: 0;
-  background: #0c0c0e;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  z-index: 5;
-  opacity: 1;
-  pointer-events: all;
-  transition: opacity .45s ease, visibility .45s ease;
-}
-#loader.hide {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.loader-ring {
-  width: 62px; height: 62px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.loader-ring::before,
-.loader-ring::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  border: 2px solid transparent;
-}
-.loader-ring::before {
-  inset: 0;
-  border-top-color: var(--gold);
-  border-right-color: rgba(245,200,66,.35);
-  animation: spin 1s linear infinite;
-}
-.loader-ring::after {
-  inset: 9px;
-  border-bottom-color: var(--gold2);
-  border-left-color: rgba(232,160,32,.35);
-  animation: spin 1.5s linear infinite reverse;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.loader-core {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 16px var(--gold), 0 0 32px rgba(245,200,66,.5);
-  animation: corePulse 1.3s ease-in-out infinite;
-}
-@keyframes corePulse {
-  0%,100% { transform: scale(1); opacity: 1; }
-  50%     { transform: scale(0.65); opacity: .55; }
-}
-
-.loader-text {
-  font-family: 'Space Mono', monospace;
-  font-size: .68rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: .9;
-}
-.loader-sub {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .55rem;
-  letter-spacing: .1em;
-  color: var(--dim);
-  margin-top: -12px;
-}
-.loader-sub b { color: var(--muted); font-weight: 500; }
-
-.loader-dots span {
-  display: inline-block;
-  width: 3px; height: 3px;
-  margin: 0 2px;
-  border-radius: 50%;
-  background: var(--gold);
-  opacity: .3;
-  animation: dotFade 1.4s ease-in-out infinite;
-}
-.loader-dots span:nth-child(1) { animation-delay: 0s; }
-.loader-dots span:nth-child(2) { animation-delay: .2s; }
-.loader-dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes dotFade {
-  0%,100% { opacity: .25; transform: scale(.9); }
-  50%     { opacity: 1;   transform: scale(1.2); }
 }
 
 /* proxy status toast */
@@ -855,24 +749,10 @@ footer {
     <button id="viewer-back" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Back">←</button>
     <span id="viewer-url">AKASH SINGH RAJPUT</span>
     <button id="viewer-reload" class="viewer-btn" onclick="reloadViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Try next proxy" title="Try next proxy">↻</button>
+    <button id="viewer-external" class="viewer-btn" onclick="openExternal()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Open in browser" title="Open in browser">↗</button>
     <button id="viewer-close" class="viewer-btn" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Close">✕</button>
   </div>
-
-  <div class="frame-wrap">
-    <iframe id="viewer-frame" src="about:blank" referrerpolicy="no-referrer" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
-
-    <!-- LOADER -->
-    <div id="loader">
-      <div class="loader-ring">
-        <div class="loader-core"></div>
-      </div>
-      <div class="loader-text">
-        Loading<span class="loader-dots"><span></span><span></span><span></span></span>
-      </div>
-      <div class="loader-sub">connecting via <b id="loader-proxy">direct</b></div>
-    </div>
-  </div>
-
+  <iframe id="viewer-frame" src="about:blank" referrerpolicy="no-referrer" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
   <div id="proxy-toast"></div>
 </div>
 <!-- ══════════════════════ -->
@@ -1144,31 +1024,36 @@ function igbc() { cur.classList.remove('big','tgbig');   cur.classList.add('igbi
 function sc()   { cur.classList.remove('big','tgbig','igbig'); }
 
 /* ═══════════════════════════════════
-   IFRAME VIEWER LOGIC — v3 (loader + redirect)
+   IFRAME VIEWER LOGIC — v2 (hash-safe)
 ═══════════════════════════════════ */
 const viewer        = document.getElementById('viewer');
 const viewerFrame   = document.getElementById('viewer-frame');
 const viewerUrlEl   = document.getElementById('viewer-url');
 const proxyToast    = document.getElementById('proxy-toast');
-const loader        = document.getElementById('loader');
-const loaderProxy   = document.getElementById('loader-proxy');
 let   viewerHistoryPushed = false;
 let   currentRawUrl       = '';
-let   loaderTimeout       = null;
 
 const VIEWER_TITLE = 'AKASH SINGH RAJPUT';
 
-/* ── PROXY LIST (ordered best → fallback) ── */
+/* ── PROXY LIST (ordered best → fallback) ──
+   Each entry: { name, fn(url) -> proxiedUrl }
+   The "direct" entry has no proxy, tries to load the URL as-is.
+   Many sites actually allow iframe embedding, so we try direct FIRST.
+*/
 const PROXIES = [
-  { name: 'direct',       fn: u => u },
-  { name: 'corsproxy.io', fn: u => 'https://corsproxy.io/?url=' + encodeURIComponent(u) },
-  { name: 'codetabs',     fn: u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
-  { name: 'allorigins',   fn: u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) },
-  { name: 'thingproxy',   fn: u => 'https://thingproxy.freeboard.io/fetch/' + u }
+  { name: 'direct',         fn: u => u },
+  { name: 'corsproxy.io',   fn: u => 'https://corsproxy.io/?url=' + encodeURIComponent(u) },
+  { name: 'codetabs',       fn: u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
+  { name: 'allorigins',     fn: u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) },
+  { name: 'thingproxy',     fn: u => 'https://thingproxy.freeboard.io/fetch/' + u }
 ];
 let PROXY_INDEX = 0;
 
-/* Split URL into base + fragment (hash routes must survive) */
+/* ── Split URL into base + fragment ──
+   Fragments (after #) are client-side only; they must be appended to the
+   FINAL proxied URL, not inside the encoded query parameter.
+   This is critical for hash-routing SPAs like vidcloud.eu.org.
+*/
 function splitHash(rawUrl) {
   const i = rawUrl.indexOf('#');
   if (i === -1) return { base: rawUrl, hash: '' };
@@ -1179,7 +1064,8 @@ function buildProxiedUrl(rawUrl, idx) {
   if (!rawUrl) return rawUrl;
   if (rawUrl.startsWith('blob:') || rawUrl.startsWith('data:')) return rawUrl;
   const { base, hash } = splitHash(rawUrl);
-  return PROXIES[idx].fn(base) + hash;
+  const fn = PROXIES[idx].fn;
+  return fn(base) + hash;
 }
 
 function showToast(msg, ms) {
@@ -1189,37 +1075,11 @@ function showToast(msg, ms) {
   proxyToast._t = setTimeout(() => proxyToast.classList.remove('show'), ms || 1800);
 }
 
-/* ── Loader control ── */
-function showLoader() {
-  clearTimeout(loaderTimeout);
-  loader.classList.remove('hide');
-  viewerFrame.classList.remove('ready');
-  loaderProxy.textContent = PROXIES[PROXY_INDEX].name;
-  /* safety: auto-hide after 18s even if load never fires */
-  loaderTimeout = setTimeout(() => {
-    hideLoader();
-    showToast('slow load — try ↻', 2500);
-  }, 18000);
-}
-function hideLoader() {
-  clearTimeout(loaderTimeout);
-  loader.classList.add('hide');
-  viewerFrame.classList.add('ready');
-}
-
-/* when iframe finishes loading, fade out loader */
-viewerFrame.addEventListener('load', () => {
-  /* ignore blank about:blank initial state */
-  const src = viewerFrame.getAttribute('src') || '';
-  if (!src || src === 'about:blank') return;
-  hideLoader();
-});
-
 function loadInViewer() {
   if (!currentRawUrl) return;
-  showLoader();
+  const entry = PROXIES[PROXY_INDEX];
   viewerFrame.src = buildProxiedUrl(currentRawUrl, PROXY_INDEX);
-  showToast('via ' + PROXIES[PROXY_INDEX].name);
+  showToast('via ' + entry.name);
 }
 
 function openViewer(url) {
@@ -1236,12 +1096,9 @@ function openViewer(url) {
 function hideViewer() {
   viewer.classList.remove('show');
   viewerFrame.src = 'about:blank';
-  viewerFrame.classList.remove('ready');
-  loader.classList.remove('hide');
   document.body.style.overflow = '';
   viewerHistoryPushed = false;
   currentRawUrl = '';
-  clearTimeout(loaderTimeout);
 }
 
 function closeViewer() {
@@ -1256,6 +1113,12 @@ function reloadViewer() {
   if (!currentRawUrl) return;
   PROXY_INDEX = (PROXY_INDEX + 1) % PROXIES.length;
   loadInViewer();
+}
+
+function openExternal() {
+  if (!currentRawUrl) return;
+  window.open(currentRawUrl, '_blank', 'noopener');
+  showToast('opened in new tab');
 }
 
 window.addEventListener('popstate', e => {
