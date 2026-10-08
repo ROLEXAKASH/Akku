@@ -68,16 +68,9 @@ body::before {
   pointer-events:none; z-index:0;
 }
 
-.wrap {
-  position:relative; z-index:1;
-  max-width:680px; margin:0 auto; padding:0 24px;
-}
+.wrap { position:relative; z-index:1; max-width:680px; margin:0 auto; padding:0 24px; }
 
-header {
-  position:relative; z-index:10;
-  padding:44px 24px 0;
-  max-width:680px; margin:0 auto;
-}
+header { position:relative; z-index:10; padding:44px 24px 0; max-width:680px; margin:0 auto; }
 .hrow { display:flex; align-items:baseline; gap:8px; margin-bottom:5px; }
 .logo { font-family:'Space Mono',monospace; font-size:1.25rem; font-weight:700; color:var(--white); letter-spacing:-.02em; }
 .logo em { color:var(--gold); font-style:normal; }
@@ -142,7 +135,6 @@ footer {
 .fr { font-size:.58rem; color:var(--dim); opacity:.4; }
 .intro { opacity:0; animation:rise .5s ease forwards .05s; }
 
-/* shared keyframes */
 @keyframes barshine {
   0%   { background-position: 0%   0%; }
   100% { background-position: 300% 0%; }
@@ -221,8 +213,6 @@ footer {
 }
 .viewer-btn:hover { background: rgba(245,200,66,.12); border-color: var(--gold); }
 #viewer-reload:hover { transform: rotate(180deg); }
-#viewer-external { font-size: .85rem; }
-#viewer-external:hover { transform: translate(1px, -1px); }
 #viewer-close { color: var(--dim); }
 #viewer-close:hover { background: rgba(255,255,255,.1); border-color: var(--muted); color: var(--white); }
 
@@ -233,7 +223,6 @@ footer {
   background: #fff;
 }
 
-/* proxy status toast */
 #proxy-toast {
   position: absolute;
   top: 56px;
@@ -255,21 +244,16 @@ footer {
   box-shadow: 0 6px 24px rgba(0,0,0,.5);
   white-space: nowrap;
 }
-#proxy-toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+#proxy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ═══════════════════════════════════
    TOP-RIGHT THREE-DOT MENU
 ═══════════════════════════════════ */
-
 #menu-wrap {
   position: fixed;
   top: 16px; right: 16px;
   z-index: 10000;
 }
-
 #menu-btn {
   width: 42px; height: 42px;
   display: flex; align-items: center; justify-content: center; gap: 4px;
@@ -350,22 +334,26 @@ footer {
 /* ═══════════════════════════════════
    HELP CENTER MODAL
 ═══════════════════════════════════ */
-
 #help-overlay {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,.78);
+  background: rgba(0,0,0,.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 9995;
+  z-index: 10001;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity .3s ease;
+  transition: opacity .3s ease, visibility .3s ease;
 }
-#help-overlay.show { opacity: 1; pointer-events: all; }
+#help-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
 
 #help-modal {
   position: relative;
@@ -383,6 +371,8 @@ footer {
     0 0 60px rgba(245,200,66,.07);
   max-height: 92vh;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 #help-overlay.show #help-modal { transform: translateY(0) scale(1); }
 
@@ -398,26 +388,30 @@ footer {
   background: linear-gradient(90deg, var(--gold2), var(--gold), #ffe88a, var(--gold2));
   background-size: 300% 100%;
   animation: barshine 2.5s linear infinite;
+  flex-shrink: 0;
 }
 
 #help-close {
   position: absolute; top: 14px; right: 14px;
-  width: 28px; height: 28px;
-  background: rgba(255,255,255,.04);
-  border: 1px solid var(--border);
-  border-radius: 4px;
+  width: 34px; height: 34px;
+  background: rgba(245,200,66,.14);
+  border: 1px solid rgba(245,200,66,.45);
+  border-radius: 6px;
   cursor: none;
   display: flex; align-items: center; justify-content: center;
-  color: var(--dim);
-  font-size: .72rem;
+  color: var(--gold);
+  font-size: .9rem;
+  font-weight: 700;
   font-family: 'Space Mono', monospace;
-  transition: background .2s, border-color .2s, color .2s;
-  z-index: 3;
+  transition: background .2s, border-color .2s, color .2s, transform .2s;
+  z-index: 5;
+  box-shadow: 0 2px 12px rgba(245,200,66,.15);
 }
 #help-close:hover {
-  background: rgba(245,200,66,.12);
+  background: var(--gold);
   border-color: var(--gold);
-  color: var(--gold);
+  color: #0c0c0e;
+  transform: rotate(90deg) scale(1.08);
 }
 
 .help-inner { padding: 28px 26px 24px; position: relative; z-index: 1; }
@@ -522,11 +516,38 @@ footer {
 .hc-arrow { font-size: .6rem; color: var(--dim); opacity: 0; transition: opacity .2s, color .2s; }
 .hc-row:hover .hc-arrow { opacity: 1; color: var(--gold); }
 
-/* ─── responsive ─── */
+.help-back-wrap {
+  padding: 0 26px 22px;
+  position: relative;
+  z-index: 1;
+}
+.help-back-btn {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  cursor: none;
+  transition: background .2s, border-color .2s, transform .15s;
+}
+.help-back-btn:hover {
+  background: rgba(245,200,66,.08);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+.help-back-btn svg { width: 13px; height: 13px; fill: var(--gold); }
+
 @media(max-width:480px){
   .curl, .cnum { display:none; }
   footer { flex-direction:column; gap:6px; align-items:flex-start; }
-  .help-inner { padding: 22px 18px 20px; }
+  .help-inner { padding: 22px 18px 18px; }
+  .help-back-wrap { padding: 0 18px 18px; }
   .as-logo { width: 50px; height: 50px; font-size: 1rem; }
   .hc-val { font-size: .64rem; }
   #menu-wrap { top: 12px; right: 12px; }
@@ -535,7 +556,6 @@ footer {
 /* ═══════════════════════════════════
    PWA INSTALL BANNER
 ═══════════════════════════════════ */
-
 @keyframes pwa-glow-pulse {
   0%,100% { box-shadow: 0 0 0 1px rgba(245,200,66,.1), 0 28px 80px rgba(0,0,0,.95), 0 0 40px rgba(245,200,66,.1); }
   50%     { box-shadow: 0 0 0 1px rgba(245,200,66,.22), 0 28px 80px rgba(0,0,0,.95), 0 0 70px rgba(245,200,66,.25); }
@@ -576,7 +596,6 @@ footer {
   pointer-events: all;
   animation: pwa-glow-pulse 3.5s ease-in-out infinite, pwa-float 5s ease-in-out infinite 1.2s;
 }
-
 #pwa-banner::before {
   content:'';
   display: block;
@@ -586,7 +605,6 @@ footer {
   animation: barshine 2s linear infinite;
   border-radius: 18px 18px 0 0;
 }
-
 #pwa-banner::after {
   content:'';
   position: absolute; inset: 0;
@@ -596,7 +614,6 @@ footer {
     radial-gradient(ellipse 50% 40% at 90% 100%, rgba(245,200,66,.04) 0%, transparent 60%);
   pointer-events: none;
 }
-
 #pwa-close-btn {
   position: absolute;
   top: -10px; right: -10px;
@@ -622,14 +639,7 @@ footer {
   transform: rotate(90deg) scale(1.1);
 }
 
-.pwa-inner {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px 18px 16px;
-  position: relative; z-index: 1;
-}
-
+.pwa-inner { display: flex; align-items: center; gap: 14px; padding: 18px 18px 16px; position: relative; z-index: 1; }
 .pwa-icon-wrap { position: relative; flex-shrink: 0; }
 .pwa-icon {
   width: 52px; height: 52px;
@@ -654,7 +664,6 @@ footer {
   border: 1px solid rgba(245,200,66,.15);
   animation: ringpulse 2.8s ease-in-out infinite;
 }
-
 .pwa-text { flex: 1; min-width: 0; }
 .pwa-eyebrow {
   font-size: .5rem; color: var(--gold);
@@ -675,28 +684,8 @@ footer {
   margin-bottom: 5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.pwa-sub {
-  font-size: .54rem; color: var(--dim); letter-spacing: .02em;
-  line-height: 1.5;
-}
-.pwa-badges { display: flex; align-items: center; gap: 5px; margin-top: 7px; }
-.pwa-badge {
-  font-size: .48rem; font-family: 'JetBrains Mono', monospace;
-  letter-spacing: .05em; text-transform: uppercase;
-  color: var(--gold);
-  background: rgba(245,200,66,.08);
-  border: 1px solid rgba(245,200,66,.18);
-  border-radius: 3px;
-  padding: 2px 5px;
-  white-space: nowrap;
-}
-
-.pwa-actions {
-  display: flex; flex-direction: column;
-  align-items: center; gap: 0;
-  flex-shrink: 0;
-}
-
+.pwa-sub { font-size: .54rem; color: var(--dim); letter-spacing: .02em; line-height: 1.5; }
+.pwa-actions { display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; }
 #pwa-install-btn {
   display: flex; align-items: center; justify-content: center; gap: 7px;
   padding: 11px 18px;
@@ -727,16 +716,7 @@ footer {
 #pwa-install-btn:active { transform: translateY(0); }
 #pwa-install-btn svg { width: 13px; height: 13px; fill: #080808; flex-shrink: 0; position: relative; }
 #pwa-install-btn span { position: relative; }
-
 #pwa-dismiss-btn { display: none; }
-
-@media(max-width:400px){
-  .pwa-inner { gap: 11px; padding: 16px 14px 15px; }
-  .pwa-icon  { width: 46px; height: 46px; border-radius: 12px; }
-  #pwa-install-btn { padding: 10px 13px; font-size: .62rem; }
-  .pwa-title { font-size: .82rem; }
-  .pwa-badges { display: none; }
-}
 </style>
 </head>
 <body>
@@ -749,11 +729,9 @@ footer {
     <button id="viewer-back" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Back">←</button>
     <span id="viewer-url">AKASH SINGH RAJPUT</span>
     <button id="viewer-reload" class="viewer-btn" onclick="reloadViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Try next proxy" title="Try next proxy">↻</button>
-
-    <!--
+    <!-- REDIRECT BUTTON HIDDEN (comment me)
     <button id="viewer-external" class="viewer-btn" onclick="openExternal()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Open in browser" title="Open in browser">↗</button>
     -->
-    
     <button id="viewer-close" class="viewer-btn" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Close">✕</button>
   </div>
   <iframe id="viewer-frame" src="about:blank" referrerpolicy="no-referrer" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
@@ -764,24 +742,16 @@ footer {
 <!-- ══ PWA INSTALL BANNER ══ -->
 <div id="pwa-banner">
   <button id="pwa-close-btn" onmouseenter="bc()" onmouseleave="sc()" onclick="document.getElementById('pwa-banner').classList.remove('show'); deferredPrompt = null;" aria-label="Close">✕</button>
-
   <div class="pwa-inner">
     <div class="pwa-icon-wrap">
-      <div class="pwa-icon">
-        <img src="https://i.postimg.cc/KzTy05Wm/IMG-20250301-092318-614.jpg" alt="AKASH">
-      </div>
+      <div class="pwa-icon"><img src="https://i.postimg.cc/KzTy05Wm/IMG-20250301-092318-614.jpg" alt="AKASH"></div>
       <div class="pwa-icon-ring"></div>
     </div>
-
     <div class="pwa-text">
-      <div class="pwa-eyebrow">
-        <span class="pwa-eyebrow-dot"></span>
-        install_app
-      </div>
+      <div class="pwa-eyebrow"><span class="pwa-eyebrow-dot"></span>install_app</div>
       <div class="pwa-title">AKASH</div>
       <div class="pwa-sub">Fast · Education · Free</div>
     </div>
-
     <div class="pwa-actions">
       <button id="pwa-install-btn" onmouseenter="bc()" onmouseleave="sc()">
         <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
@@ -789,38 +759,33 @@ footer {
       </button>
     </div>
   </div>
-
   <button id="pwa-dismiss-btn" style="display:none"></button>
 </div>
-<!-- ════════════════════════ -->
 
 <!-- ══ TOP-RIGHT THREE-DOT MENU ══ -->
 <div id="menu-wrap">
-  <button id="menu-btn" onclick="toggleMenu(event)" onmouseenter="bc()" onmouseleave="sc()" aria-label="Menu">
+  <button id="menu-btn" onmouseenter="bc()" onmouseleave="sc()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
-
   <div id="menu-drop">
-    <a href="#" class="menu-item" onclick="goHome(event)" onmouseenter="bc()" onmouseleave="sc()">
+    <a href="#" class="menu-item" id="menu-home" onmouseenter="bc()" onmouseleave="sc()">
       <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v10h-5v-6h-2v6H6V11H3l9-8z"/></svg>
       Home
     </a>
-    <button class="menu-item" onclick="openHelp(event)" onmouseenter="bc()" onmouseleave="sc()">
+    <button class="menu-item" id="menu-help" onmouseenter="bc()" onmouseleave="sc()">
       <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 10.9 12 11.5 12 13h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26A2 2 0 1010 7h-2a4 4 0 114 4z"/></svg>
       Help Center
     </button>
   </div>
 </div>
-<!-- ══════════════════════════════ -->
 
 <!-- ══ HELP CENTER MODAL ══ -->
 <div id="help-overlay">
   <div id="help-modal">
     <div class="help-bar"></div>
-    <button id="help-close" onmouseenter="bc()" onmouseleave="sc()" onclick="closeHelp()" aria-label="Close">✕</button>
+    <button id="help-close" onmouseenter="bc()" onmouseleave="sc()" aria-label="Close">✕</button>
 
     <div class="help-inner">
-
       <div class="hc-head">
         <div class="as-logo">AS</div>
         <div>
@@ -828,57 +793,37 @@ footer {
           <div class="hc-title">AKASH SINGH RAJPUT</div>
         </div>
       </div>
-
       <div class="hc-desc">
         Koi bhi query, support ya issue ke liye neeche diye gaye details par click karke direct contact karein. 🚀
       </div>
-
       <div class="hc-list">
-
-        <!-- MOBILE -->
-        <a class="hc-row" data-x="udm;*80731YYYYY95" href="#"
-           onmouseenter="bc()" onmouseleave="sc()">
-          <span class="hc-ico">
-            <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-          </span>
-          <span class="hc-body">
-            <span class="hc-lbl">mobile</span>
-            <span class="hc-val">+91620XXXXX84</span>
-          </span>
+        <a class="hc-row" data-x="udm;*80731YYYYY95" href="#" onmouseenter="bc()" onmouseleave="sc()">
+          <span class="hc-ico"><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></span>
+          <span class="hc-body"><span class="hc-lbl">mobile</span><span class="hc-val">+91620XXXXX84</span></span>
           <span class="hc-arrow">↗</span>
         </a>
-
-        <!-- INSTAGRAM -->
-        <a class="hc-row" data-x="iuuqr;..vvv/horu`fs`l/bnl.cui^`j`ri^32" href="#"
-           onmouseenter="igbc()" onmouseleave="sc()">
-          <span class="hc-ico ig">
-            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </span>
-          <span class="hc-body">
-            <span class="hc-lbl">instagram</span>
-            <span class="hc-val">@bth_akash_23</span>
-          </span>
+        <a class="hc-row" data-x="iuuqr;..vvv/horu`fs`l/bnl.cui^`j`ri^32" href="#" onmouseenter="igbc()" onmouseleave="sc()">
+          <span class="hc-ico ig"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></span>
+          <span class="hc-body"><span class="hc-lbl">instagram</span><span class="hc-val">@bth_akash_23</span></span>
           <span class="hc-arrow">↗</span>
         </a>
-
-        <!-- EMAIL -->
-        <a class="hc-row" data-x="l`hmun;`j`rijtl`srhoficuiAfl`hm/bnl" href="#"
-           onmouseenter="bc()" onmouseleave="sc()">
-          <span class="hc-ico">
-            <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          </span>
-          <span class="hc-body">
-            <span class="hc-lbl">email</span>
-            <span class="hc-val">akashkumarsinghbth@gmail.com</span>
-          </span>
+        <a class="hc-row" data-x="l`hmun;`j`rijtl`srhoficuiAfl`hm/bnl" href="#" onmouseenter="bc()" onmouseleave="sc()">
+          <span class="hc-ico"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
+          <span class="hc-body"><span class="hc-lbl">email</span><span class="hc-val">akashkumarsinghbth@gmail.com</span></span>
           <span class="hc-arrow">↗</span>
         </a>
-
       </div>
     </div>
+
+    <div class="help-back-wrap">
+      <button class="help-back-btn" id="help-back" onmouseenter="bc()" onmouseleave="sc()">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        BACK
+      </button>
+    </div>
+
   </div>
 </div>
-<!-- ══════════════════════ -->
 
 <header>
   <div class="hrow">
@@ -890,123 +835,23 @@ footer {
 
 <div class="wrap">
   <div class="sep"></div>
-
   <div class="intro">
     <div class="prompt">select_platform</div>
     <h2>Pick your<br><span class="a">institute.</span></h2>
     <p>Direct access to course platforms.<br>Click a card to open.</p>
   </div>
-
   <div class="sep"></div>
 
   <div class="cards">
-
-    <a data-x='iuuqr;..whebmnte/dt/nsf."C`ubiEdu`hmr.c`ubi.7849e`840g5g2254``8bcb24' href="#" class="card"
-       onmouseenter="bc()" onmouseleave="sc()">
+    <a data-x='iuuqr;..rutexru`sj/ho' href="#" class="card" onmouseenter="bc()" onmouseleave="sc()">
       <span class="cnum">01</span>
-      <img class="cimg"
-        src="https://upload.wikimedia.org/wikipedia/commons/7/76/Physics_wallah_logo.jpg"
-        alt="PW" onerror="this.style.display='none'">
+      <img class="cimg" src="https://upload.wikimedia.org/wikipedia/commons/7/76/Physics_wallah_logo.jpg" alt="PW" onerror="this.style.display='none'">
       <div class="cbody">
         <h3>UDAAN BIHAR BOARD 2027</h3>
         <div class="meta">AKASH SINGH RAJPUT<span class="d">·</span>Education</div>
       </div>
       <span class="curl">AKASH.com/RC ↗</span>
     </a>
-<!--
-    <a href="#" class="card" target="_blank"
-       onmouseenter="bc()" onmouseleave="sc()">
-      <span class="cnum">02</span>
-      <img class="cimg"
-        src="https://nocache-appxdb-v2.classx.co.in/subject/2026-02-24-0.8461171343418096.png"
-        alt="VA" onerror="this.style.display='none'">
-      <div class="cbody">
-        <h3>Vibrant Academy</h3>
-        <div class="meta">JEE<span class="d">·</span>Education</div>
-      </div>
-      <span class="curl">AKASH.com/VT ↗</span>
-    </a>
-
-    <a href="#" class="card" target="_blank"
-       onmouseenter="bc()" onmouseleave="sc()">
-      <span class="cnum">03</span>
-      <img class="cimg"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1mUiY27Zw1lOwzgyGbwpdWlVgzDEZGmrfjfZqT0XGew&s"
-        alt="NT" onerror="this.style.display='none'">
-      <div class="cbody">
-        <h3>Next Toppers</h3>
-        <div class="meta">Board Exams<span class="d">·</span>Education</div>
-      </div>
-      <span class="curl">AKASH.com/NT ↗</span>
-    </a>
-
-    <a href="#" class="card" target="_blank"
-       onmouseenter="bc()" onmouseleave="sc()">
-      <span class="cnum">04</span>
-      <img class="cimg"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXhmAX6UC18CYhwU2a6f7gn9E5WE0g4hzSQK2zyH_nVA&s"
-        alt="MJ" onerror="this.style.display='none'">
-      <div class="cbody">
-        <h3>Mission Jeet</h3>
-        <div class="meta">JEE / NEET<span class="d">·</span>Education</div>
-      </div>
-      <span class="curl">AKASH.com/MissionJeet ↗</span>
-    </a>
-
-    <a href="#" class="card" target="_blank"
-       onmouseenter="bc()" onmouseleave="sc()">
-      <span class="cnum">05</span>
-      <img class="cimg"
-        src="https://i.postimg.cc/L5t0Dv7p/favicon.png"
-        alt="AR" onerror="this.style.display='none'">
-      <div class="cbody">
-        <h3>English Speaking Course by Aleena Rais</h3>
-        <div class="meta">Grammar<span class="d">·</span>Education</div>
-      </div>
-      <span class="curl">AKASH.com/AleenaRais ↗</span>
-    </a>
-    
-    <a href="#" class="card" target="_blank"
-       onmouseenter="bc()" onmouseleave="sc()">
-      <span class="cnum">06</span>
-      <img class="cimg"
-        src="https://cdn.brandfetch.io/ide4H8OK32/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1681979686468"
-        alt="UC" onerror="this.style.display='none'">
-      <div class="cbody">
-        <h3>Unacademy</h3>
-        <div class="meta">Neet/Jee<span class="d">·</span>Education</div>
-      </div>
-      <span class="curl">AKASH.com/UC ↗</span>
-    </a>
-    
-    <a href="#" class="card" target="_blank"
-       onmouseenter="bc()" onmouseleave="sc()">
-      <span class="cnum">07</span>
-      <img class="cimg"
-        src="https://upload.wikimedia.org/wikipedia/commons/7/76/Physics_wallah_logo.jpg"
-        alt="Pi" onerror="this.style.display='none'">
-      <div class="cbody">
-        <h3>PW OTT - Pi</h3>
-        <div class="meta">OTT<span class="d">·</span>Education</div>
-      </div>
-      <span class="curl">AKASH.com/Pi ↗</span>
-    </a>
-    
-    <a href="#" class="card" target="_blank"
-       onmouseenter="bc()" onmouseleave="sc()">
-      <span class="cnum">08</span>
-      <img class="cimg"
-        src="https://wsrv.nl/?url=https%3A%2F%2F69b912be004e465fbcbf3c65.storage.fermion.app%2Fpublic-cached%2Fschool-pic%2Fschool-pic-unique-id%2Fc3kjrgmzqduj4bl0zfdkl&w=64&fit=cover&h=64&q=82&output=webp"
-        alt="Pi" onerror="this.style.display='none'">
-      <div class="cbody">
-        <h3>THE SKILLED BRAINS</h3>
-        <div class="meta">Skill<span class="d">·</span>Education</div>
-      </div>
-      <span class="curl">AKASH.com/SB ↗</span>
-    </a>
-   
-   -->
-
   </div>
 </div>
 
@@ -1028,7 +873,7 @@ function igbc() { cur.classList.remove('big','tgbig');   cur.classList.add('igbi
 function sc()   { cur.classList.remove('big','tgbig','igbig'); }
 
 /* ═══════════════════════════════════
-   IFRAME VIEWER LOGIC — v2 (hash-safe)
+   IFRAME VIEWER LOGIC — v3
 ═══════════════════════════════════ */
 const viewer        = document.getElementById('viewer');
 const viewerFrame   = document.getElementById('viewer-frame');
@@ -1039,25 +884,14 @@ let   currentRawUrl       = '';
 
 const VIEWER_TITLE = 'AKASH SINGH RAJPUT';
 
-/* ── PROXY LIST (ordered best → fallback) ──
-   Each entry: { name, fn(url) -> proxiedUrl }
-   The "direct" entry has no proxy, tries to load the URL as-is.
-   Many sites actually allow iframe embedding, so we try direct FIRST.
-*/
 const PROXIES = [
-  { name: 'direct',         fn: u => u },
-  { name: 'corsproxy.io',   fn: u => 'https://corsproxy.io/?url=' + encodeURIComponent(u) },
-  { name: 'codetabs',       fn: u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
-  { name: 'allorigins',     fn: u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) },
-  { name: 'thingproxy',     fn: u => 'https://thingproxy.freeboard.io/fetch/' + u }
+  { name: 'direct',       fn: u => u },
+  { name: 'corsproxy.io', fn: u => 'https://corsproxy.io/?url=' + encodeURIComponent(u) },
+  { name: 'codetabs',     fn: u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u) },
+  { name: 'allorigins',   fn: u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) }
 ];
 let PROXY_INDEX = 0;
 
-/* ── Split URL into base + fragment ──
-   Fragments (after #) are client-side only; they must be appended to the
-   FINAL proxied URL, not inside the encoded query parameter.
-   This is critical for hash-routing SPAs like vidcloud.eu.org.
-*/
 function splitHash(rawUrl) {
   const i = rawUrl.indexOf('#');
   if (i === -1) return { base: rawUrl, hash: '' };
@@ -1089,6 +923,7 @@ function loadInViewer() {
 function openViewer(url) {
   if (!url || url === '#') return;
   currentRawUrl = url;
+  PROXY_INDEX = 0;
   loadInViewer();
   viewerUrlEl.textContent = VIEWER_TITLE;
   viewer.classList.add('show');
@@ -1122,7 +957,6 @@ function reloadViewer() {
 function openExternal() {
   if (!currentRawUrl) return;
   window.open(currentRawUrl, '_blank', 'noopener');
-  showToast('opened in new tab');
 }
 
 window.addEventListener('popstate', e => {
@@ -1180,21 +1014,47 @@ function hydrateLinks() {
 document.addEventListener('DOMContentLoaded', hydrateLinks);
 window.addEventListener('load', hydrateLinks);
 
-/* ── Three-dot menu ── */
-const menuBtn  = document.getElementById('menu-btn');
-const menuDrop = document.getElementById('menu-drop');
+/* ═══════════════════════════════════
+   MENU + HELP CENTER
+═══════════════════════════════════ */
+const menuBtn      = document.getElementById('menu-btn');
+const menuDrop     = document.getElementById('menu-drop');
+const menuHome     = document.getElementById('menu-home');
+const menuHelp     = document.getElementById('menu-help');
+const helpOverlay  = document.getElementById('help-overlay');
+const helpClose    = document.getElementById('help-close');
+const helpBack     = document.getElementById('help-back');
 
-function toggleMenu(e) {
-  if (e) e.stopPropagation();
-  const open = menuDrop.classList.toggle('show');
-  menuBtn.classList.toggle('open', open);
+function openMenu() {
+  menuDrop.classList.add('show');
+  menuBtn.classList.add('open');
 }
 function closeMenu() {
   menuDrop.classList.remove('show');
   menuBtn.classList.remove('open');
 }
+function toggleMenu(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  if (menuDrop.classList.contains('show')) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
+}
+
+function openHelp(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  closeMenu();
+  helpOverlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeHelp(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  helpOverlay.classList.remove('show');
+  document.body.style.overflow = '';
+}
 function goHome(e) {
-  if (e) e.preventDefault();
+  if (e) { e.preventDefault(); e.stopPropagation(); }
   closeMenu();
   if (viewer.classList.contains('show')) {
     closeViewer();
@@ -1202,29 +1062,31 @@ function goHome(e) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
+
+menuBtn.addEventListener('click', toggleMenu);
+menuHome.addEventListener('click', goHome);
+menuHelp.addEventListener('click', openHelp);
+helpClose.addEventListener('click', closeHelp);
+helpBack.addEventListener('click', closeHelp);
+
 document.addEventListener('click', e => {
   if (!document.getElementById('menu-wrap').contains(e.target)) closeMenu();
 });
 
-/* ── Help Center modal ── */
-const helpOverlay = document.getElementById('help-overlay');
-
-function openHelp(e) {
-  if (e) { e.preventDefault(); e.stopPropagation(); }
-  closeMenu();
-  helpOverlay.classList.add('show');
-}
-function closeHelp() {
-  helpOverlay.classList.remove('show');
-}
 helpOverlay.addEventListener('click', e => {
   if (e.target === helpOverlay) closeHelp();
 });
+
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeHelp(); closeMenu(); }
+  if (e.key === 'Escape') {
+    closeHelp();
+    closeMenu();
+  }
 });
 
-/* ── PWA Install Banner ── */
+/* ═══════════════════════════════════
+   PWA INSTALL BANNER
+═══════════════════════════════════ */
 let deferredPrompt = null;
 const pwaBanner     = document.getElementById('pwa-banner');
 const pwaInstallBtn = document.getElementById('pwa-install-btn');
@@ -1233,15 +1095,13 @@ const pwaDismissBtn = document.getElementById('pwa-dismiss-btn');
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
-  setTimeout(() => {
-    pwaBanner.classList.add('show');
-  }, 2500);
+  setTimeout(() => pwaBanner.classList.add('show'), 2500);
 });
 
 pwaInstallBtn.addEventListener('click', async () => {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
+  await deferredPrompt.userChoice;
   deferredPrompt = null;
   pwaBanner.classList.remove('show');
 });
@@ -1256,7 +1116,7 @@ window.addEventListener('appinstalled', () => {
   deferredPrompt = null;
 });
 
-/* ── PWA Manifest (inline via blob) ── */
+/* PWA Manifest */
 const manifest = {
   name: "AKASH",
   short_name: "AKASH",
@@ -1266,16 +1126,8 @@ const manifest = {
   background_color: "#0c0c0e",
   theme_color: "#f5c842",
   icons: [
-    {
-      src: "https://i.postimg.cc/KzTy05Wm/IMG-20250301-092318-614.jpg",
-      sizes: "192x192",
-      type: "image/jpeg"
-    },
-    {
-      src: "https://i.postimg.cc/KzTy05Wm/IMG-20250301-092318-614.jpg",
-      sizes: "512x512",
-      type: "image/jpeg"
-    }
+    { src: "https://i.postimg.cc/KzTy05Wm/IMG-20250301-092318-614.jpg", sizes: "192x192", type: "image/jpeg" },
+    { src: "https://i.postimg.cc/KzTy05Wm/IMG-20250301-092318-614.jpg", sizes: "512x512", type: "image/jpeg" }
   ]
 };
 const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
@@ -1285,22 +1137,18 @@ manifestLink.rel   = 'manifest';
 manifestLink.href  = manifestURL;
 document.head.appendChild(manifestLink);
 
-/* ── Service Worker (inline via blob) ── */
+/* Service Worker */
 const swCode = `
-const CACHE = 'rcz-v1';
+const CACHE = 'rcz-v2';
 self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(['/']))
-  );
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
   self.skipWaiting();
 });
 self.addEventListener('activate', e => {
   e.waitUntil(clients.claim());
 });
 self.addEventListener('fetch', e => {
-  e.respondWith(
-    fetch(e.request).catch(() => caches.match(e.request))
-  );
+  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
 });
 `;
 if ('serviceWorker' in navigator) {
