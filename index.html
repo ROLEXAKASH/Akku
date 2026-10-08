@@ -205,6 +205,19 @@ footer {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+#viewer-reload {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--gold);
+  font-size: .8rem;
+  font-family: 'Space Mono', monospace;
+  cursor: none;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, border-color .2s, transform .3s;
+}
+#viewer-reload:hover { background: rgba(245,200,66,.12); border-color: var(--gold); transform: rotate(180deg); }
 #viewer-close {
   width: 32px; height: 32px;
   background: rgba(255,255,255,.04);
@@ -712,10 +725,11 @@ footer {
 <div id="viewer">
   <div class="viewer-bar">
     <button id="viewer-back" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Back">←</button>
-    <span id="viewer-url">about:blank</span>
+    <span id="viewer-url">AKASH SINGH RAJPUT</span>
+    <button id="viewer-reload" onclick="reloadViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Reload">↻</button>
     <button id="viewer-close" onclick="closeViewer()" onmouseenter="bc()" onmouseleave="sc()" aria-label="Close">✕</button>
   </div>
-  <iframe id="viewer-frame" src="about:blank" allowfullscreen allow="fullscreen"></iframe>
+  <iframe id="viewer-frame" src="about:blank" referrerpolicy="no-referrer" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
 </div>
 <!-- ══════════════════════ -->
 
@@ -859,7 +873,7 @@ footer {
 
   <div class="cards">
 
-    <a data-x="iuuqr;..snmdybneds{/bnl.SB.>c`ubiHe<784d53ee8345d2gd891bg01b" href="#" class="card"
+    <a data-x='iuuqr;..whebmnte/dt/nsf."C`ubiEdu`hmr.c`ubi.7849e`840g5g2254``8bcb24' href="#" class="card"
        onmouseenter="bc()" onmouseleave="sc()">
       <span class="cnum">01</span>
       <img class="cimg"
@@ -986,18 +1000,40 @@ function igbc() { cur.classList.remove('big','tgbig');   cur.classList.add('igbi
 function sc()   { cur.classList.remove('big','tgbig','igbig'); }
 
 /* ═══════════════════════════════════
-   IFRAME VIEWER LOGIC
+   IFRAME VIEWER LOGIC  (with proxy)
 ═══════════════════════════════════ */
 const viewer        = document.getElementById('viewer');
 const viewerFrame   = document.getElementById('viewer-frame');
 const viewerUrlEl   = document.getElementById('viewer-url');
 let   viewerHistoryPushed = false;
+let   currentRawUrl       = '';
+
+const VIEWER_TITLE = 'AKASH SINGH RAJPUT';
+
+/* ── PROXY WRAPPERS ──
+   These strip X-Frame-Options / CSP frame-ancestors headers
+   so server-backed sites can load inside an iframe.
+   Multiple fallbacks are provided.
+*/
+const PROXIES = [
+  u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+  u => 'https://corsproxy.io/?url=' + encodeURIComponent(u),
+  u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
+  u => 'https://thingproxy.freeboard.io/fetch/' + u,
+  u => u  // direct fallback (no proxy)
+];
+let PROXY_INDEX = 0;
+
+function proxiedUrl(rawUrl) {
+  if (!rawUrl || rawUrl.startsWith('blob:') || rawUrl.startsWith('data:')) return rawUrl;
+  return PROXIES[PROXY_INDEX](rawUrl);
+}
 
 function openViewer(url) {
   if (!url || url === '#') return;
-  viewerFrame.src = url;
-  try { viewerUrlEl.textContent = new URL(url).hostname; }
-  catch(e) { viewerUrlEl.textContent = url; }
+  currentRawUrl = url;
+  viewerFrame.src = proxiedUrl(url);
+  viewerUrlEl.textContent = VIEWER_TITLE;
   viewer.classList.add('show');
   document.body.style.overflow = 'hidden';
   history.pushState({ viewer: url }, '', location.href);
@@ -1009,6 +1045,7 @@ function hideViewer() {
   viewerFrame.src = 'about:blank';
   document.body.style.overflow = '';
   viewerHistoryPushed = false;
+  currentRawUrl = '';
 }
 
 function closeViewer() {
@@ -1019,11 +1056,17 @@ function closeViewer() {
   }
 }
 
+function reloadViewer() {
+  if (!currentRawUrl) return;
+  PROXY_INDEX = (PROXY_INDEX + 1) % PROXIES.length;
+  viewerFrame.src = proxiedUrl(currentRawUrl);
+}
+
 window.addEventListener('popstate', e => {
   if (e.state && e.state.viewer) {
-    viewerFrame.src = e.state.viewer;
-    try { viewerUrlEl.textContent = new URL(e.state.viewer).hostname; }
-    catch(err) { viewerUrlEl.textContent = e.state.viewer; }
+    currentRawUrl = e.state.viewer;
+    viewerFrame.src = proxiedUrl(e.state.viewer);
+    viewerUrlEl.textContent = VIEWER_TITLE;
     viewer.classList.add('show');
     document.body.style.overflow = 'hidden';
     viewerHistoryPushed = true;
